@@ -3,26 +3,41 @@ package de.metro.robocode;
 import java.awt.Color;
 
 import robocode.AdvancedRobot;
+import robocode.Condition;
+import robocode.CustomEvent;
 import robocode.HitByBulletEvent;
+import robocode.HitWallEvent;
 import robocode.ScannedRobotEvent;
 
 public class PizzaPower extends AdvancedRobot {
+	private static final double WALL_MARGIN = 30;
+	
 	Enemy enemy = new Enemy();
 	
     @Override
     public void run() {
 		setColors(Color.cyan, Color.magenta, Color.cyan);
 
-        double radius = 100.0;
+		addCustomEvent(new Condition("wallApproaching") {
+			@Override
+			public boolean test() {
+				return getX() <= WALL_MARGIN || getX() >= getBattleFieldWidth() - WALL_MARGIN || getY() <= WALL_MARGIN
+						|| getY() >= getBattleFieldHeight() - WALL_MARGIN;
+			}
+		});
+		
+        double radius = 300.0;
         double angle = 90.0;
 
         while (true) {
         	System.out.println("enemy = " + enemy);
         	
-            ahead(radius);
-            turnLeft(angle);
-            turnGunLeft(angle);
-            fireBullet(getEnergy());
+            setAhead(radius);
+            setTurnLeft(angle);
+            setTurnGunLeft(angle);
+            setFireBullet(getEnergy());
+            
+            execute();
         }
     }
 
@@ -34,6 +49,18 @@ public class PizzaPower extends AdvancedRobot {
         fire(1);
     }
 
+    public void onCustomEvent(CustomEvent e) {
+		if ("wallApproaching".equals(e.getCondition().getName())) {
+			System.out.println("wall " + getX() + " " + getY());
+			setMaxVelocity(0);
+		}
+	}
+    
+    @Override
+    public void onHitWall(HitWallEvent event) {
+    	System.out.println("wall hit " + event.getBearing() + " " + event.getTime());
+    }
+    
     public void onHitByBullet(HitByBulletEvent e) {
         turnLeft(90 - e.getBearing());
     }
