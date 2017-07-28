@@ -1,12 +1,17 @@
 package de.metro.robocode;
 
+import java.awt.Color;
+
 import robocode.*;
 
-public class PizzaPower extends Robot {
+public class PizzaPower extends AdvancedRobot {
 
     @Override
     public void run() {
-
+		setColors(Color.cyan, Color.magenta, Color.cyan);
+		setAdjustRadarForGunTurn(true);
+		setAdjustGunForRobotTurn(true);
+		
         double radius = 100.0;
         double angle = 90.0;
 
