@@ -72,7 +72,7 @@ public class PizzaPower extends AdvancedRobot {
 			
 			if (timeFromLastWallHit > 100) {
 				timeFromLastWallHit = 0;
-				setMaxVelocity(0);
+//				setMaxVelocity(0);
 			}
 		}
 	}
