@@ -1,8 +1,8 @@
-package de.metro.robocode;
+package de.metro.robocod;
 
 import robocode.*;
 
-public class TestBot extends Robot {
+public class PizzaPower extends Robot {
 
     @Override
     public void run() {
