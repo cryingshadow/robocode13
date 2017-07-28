@@ -16,6 +16,7 @@ public class PizzaPower extends AdvancedRobot {
 	Enemy enemy = new Enemy();
 	static double xForce;
 	static double yForce;
+	static int timeFromLastWallHit = 0;
 	
     @Override
     public void run() {
@@ -31,6 +32,9 @@ public class PizzaPower extends AdvancedRobot {
 		
         while (true) {
         	System.out.println("enemy = " + enemy + " others= " + getOthers());
+        	System.out.println(timeFromLastWallHit);
+        	
+        	timeFromLastWallHit++;
         	
         	setTurnRadarRight(360);
             
@@ -64,8 +68,12 @@ public class PizzaPower extends AdvancedRobot {
     
     public void onCustomEvent(CustomEvent e) {
 		if ("wallApproaching".equals(e.getCondition().getName())) {
-			System.out.println("wall " + getX() + " " + getY());
-			setMaxVelocity(0);
+			System.out.println("wall X= " + getX() + " Y= " + getY() + " timeFromLastWallHit= " + timeFromLastWallHit);
+			
+			if (timeFromLastWallHit > 100) {
+				timeFromLastWallHit = 0;
+				setMaxVelocity(0);
+			}
 		}
 	}
     
