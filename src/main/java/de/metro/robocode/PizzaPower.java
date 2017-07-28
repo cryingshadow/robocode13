@@ -1,4 +1,4 @@
-package de.metro.robocod;
+package de.metro.robocode;
 
 import robocode.*;
 
