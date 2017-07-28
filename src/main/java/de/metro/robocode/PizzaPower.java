@@ -9,9 +9,7 @@ public class PizzaPower extends AdvancedRobot {
     @Override
     public void run() {
 		setColors(Color.cyan, Color.magenta, Color.cyan);
-		setAdjustRadarForGunTurn(true);
-		setAdjustGunForRobotTurn(true);
-		
+
         double radius = 100.0;
         double angle = 90.0;
 
@@ -31,4 +29,5 @@ public class PizzaPower extends AdvancedRobot {
         turnLeft(90 - e.getBearing());
     }
 
+    
 }
