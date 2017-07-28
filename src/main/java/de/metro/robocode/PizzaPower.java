@@ -2,10 +2,13 @@ package de.metro.robocode;
 
 import java.awt.Color;
 
-import robocode.*;
+import robocode.AdvancedRobot;
+import robocode.HitByBulletEvent;
+import robocode.ScannedRobotEvent;
 
 public class PizzaPower extends AdvancedRobot {
-
+	Enemy enemy = new Enemy();
+	
     @Override
     public void run() {
 		setColors(Color.cyan, Color.magenta, Color.cyan);
@@ -29,5 +32,20 @@ public class PizzaPower extends AdvancedRobot {
         turnLeft(90 - e.getBearing());
     }
 
-    
+	public class Enemy {
+		double bearing;
+		double distance;
+		double energy;
+		double heading;
+		double velocity;
+		String name;
+		private double x;
+		private double y;
+
+		@Override
+		public String toString() {
+			return "Enemy [bearing=" + bearing + ", distance=" + distance + ", energy=" + energy + ", heading="
+					+ heading + ", velocity=" + velocity + ", name=" + name + ", x=" + x + ", y=" + y + "]";
+		}
+	}
 }
