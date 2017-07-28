@@ -49,9 +49,28 @@ public class PizzaPower extends AdvancedRobot {
     	
     	moveCorners(e);
     	
-        fire(1);
+    	firePredictiveBullet();
     }
+    
+    void firePredictiveBullet() {
+    	double firePower = computeMinBulletPower(enemy.energy, enemy.distance);
+    	
+    	setFireBullet(firePower);
+    }
+    
 
+	private double computeMinBulletPower(double enemyEnergy, double distance) {
+		if (enemyEnergy <= 4.0) {
+			return Math.max(0.1, 0.00001 + enemyEnergy / 4.0);
+		}
+		
+		if (enemyEnergy <= 16.0) {
+			return Math.min(3.0, 0.00001 + (2.0 + enemyEnergy) / 6);
+		}
+		
+		return Math.min(3.0, 400 / distance);
+	}
+	
     public void moveCorners(ScannedRobotEvent e) {
 		double absoluteBearing = e.getBearingRadians() + getHeadingRadians();
 		double distance = e.getDistance();
@@ -72,6 +91,7 @@ public class PizzaPower extends AdvancedRobot {
 			
 			if (timeFromLastWallHit > 100) {
 				timeFromLastWallHit = 0;
+				// TODO: remove or improve this
 //				setMaxVelocity(0);
 			}
 		}
