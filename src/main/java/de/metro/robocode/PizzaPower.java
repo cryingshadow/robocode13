@@ -8,11 +8,14 @@ import robocode.CustomEvent;
 import robocode.HitByBulletEvent;
 import robocode.HitWallEvent;
 import robocode.ScannedRobotEvent;
+import robocode.util.Utils;
 
 public class PizzaPower extends AdvancedRobot {
 	private static final double WALL_MARGIN = 30;
 	
 	Enemy enemy = new Enemy();
+	static double xForce;
+	static double yForce;
 	
     @Override
     public void run() {
@@ -26,16 +29,10 @@ public class PizzaPower extends AdvancedRobot {
 			}
 		});
 		
-        double radius = 300.0;
-        double angle = 90.0;
-
         while (true) {
-        	System.out.println("enemy = " + enemy);
+        	System.out.println("enemy = " + enemy + " others= " + getOthers());
         	
-            setAhead(radius);
-            setTurnLeft(angle);
-            setTurnGunLeft(angle);
-            setFireBullet(getEnergy());
+        	setTurnRadarRight(360);
             
             execute();
         }
@@ -46,9 +43,25 @@ public class PizzaPower extends AdvancedRobot {
     		enemy.update(e, getX(), getY(), getHeading());
     	}
     	
+    	moveCorners(e);
+    	
         fire(1);
     }
 
+    public void moveCorners(ScannedRobotEvent e) {
+		double absoluteBearing = e.getBearingRadians() + getHeadingRadians();
+		double distance = e.getDistance();
+
+		xForce = xForce * .9 - Math.sin(absoluteBearing) / distance;
+		yForce = yForce * .9 - Math.cos(absoluteBearing) / distance;
+
+		setTurnRightRadians(Utils.normalRelativeAngle(Math.atan2(xForce + 1 / getX() - 1 / (getBattleFieldWidth() - getX()),
+						yForce + 1 / getY() - 1 / (getBattleFieldHeight() - getY())) - getHeadingRadians()));
+
+		setAhead(Double.POSITIVE_INFINITY);
+		setMaxVelocity(420 / getTurnRemaining());
+	}
+    
     public void onCustomEvent(CustomEvent e) {
 		if ("wallApproaching".equals(e.getCondition().getName())) {
 			System.out.println("wall " + getX() + " " + getY());
